@@ -112,8 +112,8 @@ export default function Home() {
   const rightProjects = projects.slice(midPoint);
 
   return (
-    <main id="main-container" className="relative w-full h-[400vh] bg-black">
-      <div id="bg-color-layer" className="fixed inset-0 w-full h-screen z-0 bg-black" />
+    <main id="main-container" className="relative w-full h-[400vh] bg-bg">
+      <div id="bg-color-layer" className="fixed inset-0 w-full h-screen z-0 bg-bg" />
       
       <GSAPLoader />
       
@@ -148,7 +148,7 @@ export default function Home() {
       >
         <div className="w-[45%] md:w-1/4 flex flex-col gap-4 md:gap-6 pointer-events-auto">
           {currentCategory && (
-            <h3 className="text-[#0f68ff] text-[10px] md:text-xs font-mono tracking-[0.3em] uppercase mb-2">
+            <h3 className="text-primary text-xxs md:text-xs font-mono tracking-[0.3em] uppercase mb-2">
               {currentCategory.title}
             </h3>
           )}
@@ -161,13 +161,13 @@ export default function Home() {
                   onClick={() => setActiveProject(isOpen ? null : id)}
                   className="text-left group cursor-pointer w-full focus:outline-none"
                 >
-                  <span className="text-white/40 text-[10px] font-mono block mb-1">00{idx + 1}</span>
-                  <h4 className={`text-base md:text-xl font-bold font-sans tracking-tight transition-all duration-300 ${isOpen ? 'text-[#0f68ff] translate-x-2' : 'text-white group-hover:text-[#0f68ff] group-hover:translate-x-2'}`}>
+                  <span className="text-fg/40 text-xxs font-mono block mb-1">00{idx + 1}</span>
+                  <h4 className={`text-base md:text-xl font-bold font-sans tracking-tight transition-all duration-300 ${isOpen ? 'text-primary translate-x-2' : 'text-fg group-hover:text-primary group-hover:translate-x-2'}`}>
                     {proj.title}
                   </h4>
                 </button>
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
-                  <p className="text-white/70 text-xs md:text-sm font-mono leading-relaxed pl-2 border-l border-[#0f68ff]/50">
+                  <p className="text-fg/70 text-xs md:text-sm font-mono leading-relaxed pl-2 border-l border-primary/50">
                     {proj.desc}
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export default function Home() {
 
         <div className="w-[45%] md:w-1/4 flex flex-col gap-4 md:gap-6 items-end text-right pointer-events-auto">
           {currentCategory && (
-            <h3 className="text-transparent text-[10px] md:text-xs font-mono tracking-[0.3em] uppercase mb-2 select-none">
+            <h3 className="text-transparent text-xxs md:text-xs font-mono tracking-[0.3em] uppercase mb-2 select-none">
               -
             </h3>
           )}
@@ -191,13 +191,13 @@ export default function Home() {
                   onClick={() => setActiveProject(isOpen ? null : id)}
                   className="text-right group cursor-pointer w-full focus:outline-none"
                 >
-                  <span className="text-white/40 text-[10px] font-mono block mb-1">00{midPoint + idx + 1}</span>
-                  <h4 className={`text-base md:text-xl font-bold font-sans tracking-tight transition-all duration-300 ${isOpen ? 'text-[#0f68ff] -translate-x-2' : 'text-white group-hover:text-[#0f68ff] group-hover:-translate-x-2'}`}>
+                  <span className="text-fg/40 text-xxs font-mono block mb-1">00{midPoint + idx + 1}</span>
+                  <h4 className={`text-base md:text-xl font-bold font-sans tracking-tight transition-all duration-300 ${isOpen ? 'text-primary -translate-x-2' : 'text-fg group-hover:text-primary group-hover:-translate-x-2'}`}>
                     {proj.title}
                   </h4>
                 </button>
                 <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-24 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'} w-full`}>
-                  <p className="text-white/70 text-xs md:text-sm font-mono leading-relaxed pr-2 border-r border-[#0f68ff]/50">
+                  <p className="text-fg/70 text-xs md:text-sm font-mono leading-relaxed pr-2 border-r border-primary/50">
                     {proj.desc}
                   </p>
                 </div>
