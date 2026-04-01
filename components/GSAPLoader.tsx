@@ -18,18 +18,21 @@ export default function GSAPLoader() {
 
     /**
      * 1. INITIAL STAY (Biru)
-     * Layar muncul dalam kondisi biru diam.
+     * Menunggu sejenak sebelum mulai beraksi.
      */
     tl.to(gridRef.current, { opacity: 1, duration: 0.5 })
-      .to({}, { duration: 0.8 });
+      .to({}, { duration: 0.6 });
 
     /**
-     * 2. BIP BIP BIP (3x Kedip Cepat - Biru)
+     * 2. BIP BIP BIP BIP (4x Kedip Cepat - Biru)
+     * Kedipan tajam dan singkat sesuai request.
      */
     tl.to(gridRef.current, { opacity: 0, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
-      .to({}, { duration: 0.15 })
+      .to({}, { duration: 0.12 })
       .to(gridRef.current, { opacity: 0, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
-      .to({}, { duration: 0.15 })
+      .to({}, { duration: 0.12 })
+      .to(gridRef.current, { opacity: 0, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
+      .to({}, { duration: 0.12 })
       .to(gridRef.current, { opacity: 0, duration: 0.05, repeat: 1, yoyo: true, ease: "none" });
 
     /**
@@ -40,6 +43,7 @@ export default function GSAPLoader() {
 
     /**
      * 4. BEEP BEEP BEEP (3x Kedip Lambat + Perubahan Warna ke Putih)
+     * Irama melambat saat sistem "memulihkan" warna.
      */
     const step1 = [0, 1, 5, 6, 2, 10];
     const step2 = [11, 7, 3, 4, 8, 12, 16, 20, 21, 17, 13, 9, 14, 18, 22];
@@ -48,33 +52,34 @@ export default function GSAPLoader() {
     // Beeep 1
     tl.to(gridRef.current, { opacity: 0, duration: 0.2, repeat: 1, yoyo: true, ease: "sine.inOut" })
       .to(step1.map(i => squares[i]), { backgroundColor: "#ffffff", duration: 0.1 }, "-=0.3")
-      .to({}, { duration: 0.25 })
+      .to({}, { duration: 0.2 })
       
       // Beeep 2
       .to(gridRef.current, { opacity: 0, duration: 0.2, repeat: 1, yoyo: true, ease: "sine.inOut" })
       .to(step2.map(i => squares[i]), { backgroundColor: "#ffffff", duration: 0.1 }, "-=0.3")
-      .to({}, { duration: 0.25 })
+      .to({}, { duration: 0.2 })
       
       // Beeep 3
       .to(gridRef.current, { opacity: 0, duration: 0.2, repeat: 1, yoyo: true, ease: "sine.inOut" })
       .to(step3.map(i => squares[i]), { backgroundColor: "#ffffff", duration: 0.1 }, "-=0.3");
 
     /**
-     * 5. THIRD STAY (Putih Stabil - Sebentar saja)
+     * 5. THIRD STAY (Putih Stabil)
+     * Hanya sebentar sebelum transisi keluar.
      */
     tl.to(gridRef.current, { 
       opacity: 1, 
       duration: 0.1, 
       onStart: () => { gsap.set(gridRef.current, { opacity: 1 }); } 
     })
-    .to({}, { duration: 0.5 });
+    .to({}, { duration: 0.4 });
 
     /**
-     * 6. FADE HILANG (Smooth Out)
+     * 6. FADE HILANG (Fade Out)
      */
     tl.to(gridRef.current, {
       opacity: 0,
-      duration: 0.8,
+      duration: 0.7,
       ease: "power2.inOut"
     })
     .to(loaderRef.current, {

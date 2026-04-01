@@ -255,6 +255,7 @@ export default function ThreeLayer({
   setSelectedGlobalIndex: Dispatch<SetStateAction<number | null>>;
 }) {
   const [activeTab, setActiveTab] = useState<string>("Work");
+  const mtsRef = useRef<HTMLHeadingElement>(null);
   
   const numDots = 10;
   const dotsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -271,6 +272,21 @@ export default function ThreeLayer({
     let hasMoved = false;
 
     const ctx = gsap.context(() => {
+      // 1. Animasi Bip Bip untuk MTS saat pertama muncul
+      if (mtsRef.current) {
+        const tlMts = gsap.timeline({ delay: 1.5 }); // Muncul setelah loader transisi
+        tlMts.set(mtsRef.current, { opacity: 0 })
+          .to(mtsRef.current, { opacity: 1, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
+          .to({}, { duration: 0.12 })
+          .to(mtsRef.current, { opacity: 1, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
+          .to({}, { duration: 0.12 })
+          .to(mtsRef.current, { opacity: 1, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
+          .to({}, { duration: 0.12 })
+          .to(mtsRef.current, { opacity: 1, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
+          .to(mtsRef.current, { opacity: 1, duration: 0.1 });
+      }
+
+      // 2. Logika Mouse Tail
       const handleMouseMove = (e: MouseEvent) => {
         mouse.current.x = e.clientX;
         mouse.current.y = e.clientY;
@@ -343,7 +359,10 @@ export default function ThreeLayer({
             </div>
           </div>
           <div className="relative -ml-2 transition-all duration-300 pointer-events-auto flex items-end">
-            <h1 className="font-sans font-black text-giant text-fg leading-[0.75] tracking-tighter cursor-default select-none">
+            <h1 
+              ref={mtsRef}
+              className="font-sans font-black text-giant text-fg leading-[0.75] tracking-tighter mix-blend-difference cursor-default select-none opacity-0"
+            >
               MTS
             </h1>
           </div>
