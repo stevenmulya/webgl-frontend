@@ -87,39 +87,6 @@ function CRTMaterial({ url }: { url: string }) {
   return <shaderMaterial attach="material" args={[shaderArgs]} side={THREE.DoubleSide} />;
 }
 
-function Stickman() {
-  const chromeMaterial = <meshStandardMaterial color="#c8ced4" metalness={1} roughness={0.15} />;
-  
-  return (
-    <group position={[0, -0.8, 0]}>
-      <mesh position={[0, 1.5, 0]}>
-        <sphereGeometry args={[0.3, 32, 32]} />
-        {chromeMaterial}
-      </mesh>
-      <mesh position={[0, 0.7, 0]}>
-        <cylinderGeometry args={[0.1, 0.1, 1.2]} />
-        {chromeMaterial}
-      </mesh>
-      <mesh position={[-0.4, 1.0, 0]} rotation={[0, 0, -Math.PI / 4]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.8]} />
-        {chromeMaterial}
-      </mesh>
-      <mesh position={[0.4, 1.0, 0]} rotation={[0, 0, Math.PI / 4]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.8]} />
-        {chromeMaterial}
-      </mesh>
-      <mesh position={[-0.2, 0, 0]} rotation={[0, 0, -Math.PI / 8]}>
-        <cylinderGeometry args={[0.1, 0.1, 1]} />
-        {chromeMaterial}
-      </mesh>
-      <mesh position={[0.2, 0, 0]} rotation={[0, 0, Math.PI / 8]}>
-        <cylinderGeometry args={[0.1, 0.1, 1]} />
-        {chromeMaterial}
-      </mesh>
-    </group>
-  );
-}
-
 function TVCube({ 
   selectedIndex, 
   setSelectedIndex,
@@ -140,12 +107,60 @@ function TVCube({
   const mouseTargetRotation = useRef(new THREE.Vector2(0, 0));
   const currentMouseRotation = useRef(new THREE.Vector2(0, 0));
 
+  const isDragging = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const targetRotation = useRef({ x: 0, y: 0 });
+  const lastDragAmount = useRef(0);
+
+  useEffect(() => {
+    if (activeTab === "Work" && selectedIndex === null) {
+      targetRotation.current.x = groupRef.current.rotation.x;
+      targetRotation.current.y = groupRef.current.rotation.y;
+    }
+  }, [activeTab, selectedIndex]);
+
+  useEffect(() => {
+    const handlePointerDown = (e: MouseEvent) => {
+      isDragging.current = true;
+      dragStartPos.current = { x: e.clientX, y: e.clientY };
+      lastDragAmount.current = 0;
+    };
+
+    const handlePointerMove = (e: MouseEvent) => {
+      if (!isDragging.current || activeTab !== "Work" || selectedIndex !== null) return;
+      
+      const deltaX = e.clientX - dragStartPos.current.x;
+      const deltaY = e.clientY - dragStartPos.current.y;
+      
+      lastDragAmount.current += Math.abs(deltaX) + Math.abs(deltaY);
+      
+      targetRotation.current.y += deltaX * 0.005;
+      targetRotation.current.x += deltaY * 0.005;
+      
+      dragStartPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handlePointerUp = () => {
+      isDragging.current = false;
+    };
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+
+    return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [activeTab, selectedIndex]);
+
   useEffect(() => {
     if (activeTab === "About") {
-      gsap.to(groupRef.current.rotation, { x: 0, y: 0, z: 0, duration: 1.5, ease: "expo.inOut" });
-      gsap.to(frontDoorRef.current.rotation, { y: -Math.PI / 1.5, duration: 1.5, ease: "expo.inOut" });
-      gsap.to(topDoorRef.current.rotation, { x: -Math.PI / 1.5, duration: 1.5, ease: "expo.inOut" });
-      gsap.to(camera.position, { x: 0, y: 0, z: 0.1, duration: 2, ease: "expo.inOut" });
+      gsap.to(groupRef.current.rotation, { x: 0.35, y: -0.45, z: 0.1, duration: 1.5, ease: "expo.inOut" });
+      gsap.to(frontDoorRef.current.rotation, { y: 0, duration: 1.5, ease: "expo.inOut" });
+      gsap.to(topDoorRef.current.rotation, { x: 0, duration: 1.5, ease: "expo.inOut" });
+      gsap.to(camera.position, { x: 0, y: 0, z: 18.0, duration: 2, ease: "expo.inOut" });
     } else if (activeTab === "Community") {
       gsap.to(frontDoorRef.current.rotation, { y: 0, duration: 1.5, ease: "expo.inOut" });
       gsap.to(topDoorRef.current.rotation, { x: 0, duration: 1.5, ease: "expo.inOut" });
@@ -170,23 +185,20 @@ function TVCube({
 
   useFrame((state, delta) => {
     if (selectedIndex === null && activeTab === "Work") {
-      groupRef.current.rotation.y += delta * 0.5;
-      groupRef.current.rotation.x += delta * 0.3;
-
-      mouseTargetRotation.current.x = -state.mouse.y * 0.4;
-      mouseTargetRotation.current.y = state.mouse.x * 0.4;
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotation.current.x, 0.04);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotation.current.y, 0.04);
+    } else if (activeTab === "Community") {
+      groupRef.current.rotation.y += delta * 1.5;
+      groupRef.current.rotation.x += delta * 1.2;
+    } else if (activeTab === "About") {
+      mouseTargetRotation.current.x = -state.mouse.y * 0.1;
+      mouseTargetRotation.current.y = state.mouse.x * 0.1;
 
       currentMouseRotation.current.x = THREE.MathUtils.lerp(currentMouseRotation.current.x, mouseTargetRotation.current.x, 0.05);
       currentMouseRotation.current.y = THREE.MathUtils.lerp(currentMouseRotation.current.y, mouseTargetRotation.current.y, 0.05);
 
-      groupRef.current.rotation.x += currentMouseRotation.current.x * delta;
-      groupRef.current.rotation.y += currentMouseRotation.current.y * delta;
-    } else if (activeTab === "Community") {
-      groupRef.current.rotation.y += delta * 1.5;
-      groupRef.current.rotation.x += delta * 1.2;
-    } else {
-      currentMouseRotation.current.x = THREE.MathUtils.lerp(currentMouseRotation.current.x, 0, 0.1);
-      currentMouseRotation.current.y = THREE.MathUtils.lerp(currentMouseRotation.current.y, 0, 0.1);
+      groupRef.current.rotation.x = 0.35 + currentMouseRotation.current.x;
+      groupRef.current.rotation.y = -0.45 + currentMouseRotation.current.y;
     }
 
     groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 4.0) * 0.015;
@@ -197,13 +209,12 @@ function TVCube({
   });
 
   return (
-    <group ref={groupRef} scale={[1.3, 1.3, 1.3]} onClick={(e) => {
+    <group ref={groupRef} position={[0, 0, 0]} scale={[1.3, 1.3, 1.3]} onClick={(e) => {
       e.stopPropagation();
-      if (activeTab === "Work") {
+      if (activeTab === "Work" && lastDragAmount.current < 5) {
         setSelectedIndex(Math.floor(e.object.userData.index / 2) || 0);
       }
     }}>
-      <Stickman />
       <pointLight 
         ref={screenLightRef}
         color="#0f68ff" 
@@ -272,9 +283,8 @@ export default function ThreeLayer({
     let hasMoved = false;
 
     const ctx = gsap.context(() => {
-      // 1. Animasi Bip Bip untuk MTS saat pertama muncul
       if (mtsRef.current) {
-        const tlMts = gsap.timeline({ delay: 1.5 }); // Muncul setelah loader transisi
+        const tlMts = gsap.timeline({ delay: 1.5 });
         tlMts.set(mtsRef.current, { opacity: 0 })
           .to(mtsRef.current, { opacity: 1, duration: 0.05, repeat: 1, yoyo: true, ease: "none" })
           .to({}, { duration: 0.12 })
@@ -286,7 +296,6 @@ export default function ThreeLayer({
           .to(mtsRef.current, { opacity: 1, duration: 0.1 });
       }
 
-      // 2. Logika Mouse Tail
       const handleMouseMove = (e: MouseEvent) => {
         mouse.current.x = e.clientX;
         mouse.current.y = e.clientY;
@@ -329,18 +338,20 @@ export default function ThreeLayer({
   }, []);
 
   return (
-    <div className="absolute inset-0 z-10 w-full h-screen bg-transparent overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-10 w-screen h-screen bg-transparent overflow-hidden pointer-events-none flex items-center justify-center">
       
-      {Array.from({ length: numDots }).map((_, i) => (
-        <div 
-          key={i}
-          ref={(el) => { dotsRef.current[i] = el; }}
-          className="fixed top-0 left-0 w-2 h-2 bg-primary pointer-events-none z-[999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
-          style={{ opacity: 0, scale: 1 - i * 0.08 }}
-        />
-      ))}
+      <div className={`transition-opacity duration-700 ${activeTab === "About" ? 'opacity-0' : 'opacity-100'}`}>
+        {Array.from({ length: numDots }).map((_, i) => (
+          <div 
+            key={i}
+            ref={(el) => { dotsRef.current[i] = el; }}
+            className="fixed top-0 left-0 w-2 h-2 bg-primary pointer-events-none z-[999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference"
+            style={{ opacity: 0, scale: 1 - i * 0.08 }}
+          />
+        ))}
+      </div>
 
-      <div className={`fixed bottom-10 left-10 z-50 pointer-events-none flex flex-col justify-end transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${isDetailActive ? 'opacity-0 -translate-x-10' : 'opacity-100 translate-x-0'}`}>
+      <div className={`fixed bottom-10 left-10 z-50 pointer-events-none flex flex-col justify-end transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] ${isDetailActive || activeTab === "About" ? 'opacity-0 -translate-x-10' : 'opacity-100 translate-x-0'}`}>
         <div className="flex gap-8 font-mono text-[11px] opacity-60 mb-6 pl-2">
           <div className="flex flex-col gap-1">
             <div className="leading-none">Website Developer</div>
@@ -400,7 +411,10 @@ export default function ThreeLayer({
         />
       </div>
 
-      <Canvas camera={{ position: [0, 0, 8.5] }} style={{ pointerEvents: 'auto' }}>
+      <Canvas 
+        camera={{ position: [0, 0, 8.5] }} 
+        style={{ pointerEvents: 'auto', position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vh' }}
+      >
         <ambientLight intensity={2.5} />
         <Suspense fallback={null}>
           <TVCube selectedIndex={selectedGlobalIndex} setSelectedIndex={setSelectedGlobalIndex} activeTab={activeTab} />
