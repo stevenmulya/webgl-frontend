@@ -58,8 +58,8 @@ export default function GSAPLoader() {
   }, []);
 
   return (
-    <div ref={loaderRef} className="fixed inset-0 z-[999] bg-bg flex items-center justify-center pointer-events-none">
-      <div ref={gridRef} className="grid grid-cols-5 gap-[2px]">
+    <div ref={loaderRef} className="fixed inset-0 z-999 bg-bg flex items-center justify-center pointer-events-none">
+      <div ref={gridRef} className="grid grid-cols-5 gap-0.5">
         {Array.from({ length: 25 }).map((_, i) => (
           <div 
             key={i} 

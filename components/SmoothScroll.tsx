@@ -1,4 +1,4 @@
-"use client"; // Wajib ada ini
+"use client";
 import { ReactLenis } from "lenis/react";
 import { ReactNode } from "react";
 

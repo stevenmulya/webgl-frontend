@@ -228,7 +228,7 @@ function TVCube({
         });
       }
     }
-  }, [activeTab, selectedIndex, camera]);
+  }, [activeTab, selectedIndex, camera, setSelectedIndex]);
 
   useFrame((state, delta) => {
     if (selectedIndex === null && activeTab === "Work") {
@@ -410,7 +410,7 @@ export default function ThreeLayer({
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [numDots]);
 
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault();

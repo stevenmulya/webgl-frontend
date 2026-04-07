@@ -4,7 +4,11 @@
   --color-bg: #050505;
   --color-fg: #c8ced4;
   --color-primary: #0f68ff;
+<<<<<<< HEAD
   --text-xxs: 0.625rem;
+=======
+  --text-xxs: 11px;
+>>>>>>> 33c0494c29784461b974f2a693ab34d996ba3a85
   --text-giant: 9.375rem;
 }
 
@@ -36,6 +40,23 @@ html, body {
   opacity: 0.1;
 }
 
+<<<<<<< HEAD
+=======
+.chrome-text {
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #e5e7eb 45%,
+    #9ca3af 50%,
+    #4b5563 53%,
+    #f3f4f6 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+>>>>>>> 33c0494c29784461b974f2a693ab34d996ba3a85
 @keyframes recBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
