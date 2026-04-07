@@ -43,7 +43,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
 
           if (activeIndex === 2 && p.random(1) > 0.97) thunderAlpha = 255;
           if (thunderAlpha > 0) {
-            p.fill(255, 255, 255, thunderAlpha);
+            p.fill(200, 206, 212, thunderAlpha);
             p.rect(0, 0, p.width, p.height);
             thunderAlpha -= 20;
           }
@@ -68,7 +68,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
           }
           show() {
             this.p.noStroke();
-            this.p.fill(255, 255, 255, 180);
+            this.p.fill(200, 206, 212, 180);
             this.p.circle(this.pos.x, this.pos.y, this.size);
           }
         }
@@ -87,7 +87,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
             if (this.y > this.p.height) this.y = p.random(-20, 0);
           }
           show() {
-            this.p.stroke(15, 104, 255, 150);
+            this.p.stroke("#0f68ff");
             this.p.strokeWeight(1);
             this.p.line(this.x, this.y, this.x, this.y + this.l);
           }
@@ -107,7 +107,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
             if (this.y > this.p.height) { this.y = -10; this.x = p.random(p.width); }
           }
           show() {
-            this.p.stroke(200, 200, 255, 200);
+            this.p.stroke(200, 206, 212, 200);
             this.p.strokeWeight(2);
             this.p.line(this.x, this.y, this.x - 5, this.y + 15);
           }
@@ -128,7 +128,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
           }
           show() {
             this.p.noStroke();
-            this.p.fill(255, 200, 50, p.sin(this.p.frameCount * 0.02) * 100 + 100);
+            this.p.fill(200, 206, 212, p.sin(this.p.frameCount * 0.02) * 100 + 100);
             this.p.circle(this.pos.x, this.pos.y, p.random(1, 3));
           }
         }
@@ -147,7 +147,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
           }
           show() {
             this.p.noFill();
-            this.p.stroke(255, 50);
+            this.p.stroke(200, 206, 212, 50);
             p.beginShape();
             for(let i=0; i<10; i++) {
               let nx = this.x + i * 10;
@@ -179,7 +179,7 @@ export default function P5Layer({ activeGlobalIndex }: { activeGlobalIndex: numb
             let sy = p.map(this.y / this.z, 0, 1, 0, p.height) + p.height/2;
             let r = p.map(this.z, 0, p.width, 8, 0);
             this.p.noStroke();
-            this.p.fill(15, 104, 255, p.map(this.z, 0, p.width, 255, 0));
+            this.p.fill("#0f68ff");
             this.p.circle(sx, sy, r);
           }
         }
