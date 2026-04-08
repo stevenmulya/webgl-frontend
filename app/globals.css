@@ -1,67 +1,120 @@
 @import "tailwindcss";
 
+
+
 @theme inline {
-  --color-bg: #050505;
-  --color-fg: #c8ced4;
+
+  --color-bg: #f7f1df;
+
+  --color-fg: #111111;
+
   --color-primary: #0f68ff;
-<<<<<<< HEAD
-  --text-xxs: 0.625rem;
-=======
+
   --text-xxs: 11px;
->>>>>>> 33c0494c29784461b974f2a693ab34d996ba3a85
+
   --text-giant: 9.375rem;
+
 }
+
+
 
 * {
+
   scrollbar-width: none !important;
+
   -ms-overflow-style: none !important;
+
 }
+
+
 
 *::-webkit-scrollbar {
+
   display: none !important;
+
   width: 0 !important;
+
   height: 0 !important;
+
 }
+
+
 
 html, body {
+
   background: var(--color-bg);
+
   color: var(--color-fg);
+
   overflow-x: hidden;
+
   margin: 0;
+
   padding: 0;
+
 }
+
+
 
 .halftone-text {
+
   background: linear-gradient(90deg, var(--color-fg) 50%, var(--color-bg) 50%);
+
   background-size: 4px 4px;
+
   -webkit-background-clip: text;
+
   background-clip: text;
+
   color: transparent;
+
   opacity: 0.1;
+
 }
 
-<<<<<<< HEAD
-=======
+
+
 .chrome-text {
+
   background: linear-gradient(
+
     to bottom,
-    #ffffff 0%,
-    #e5e7eb 45%,
+
+    #111111 0%,
+
+    #4b5563 45%,
+
     #9ca3af 50%,
-    #4b5563 53%,
-    #f3f4f6 100%
+
+    #e5e7eb 53%,
+
+    #ffffff 100%
+
   );
+
   -webkit-background-clip: text;
+
   background-clip: text;
+
   color: transparent;
+
 }
 
->>>>>>> 33c0494c29784461b974f2a693ab34d996ba3a85
+
+
 @keyframes recBlink {
+
   0%, 100% { opacity: 1; }
+
   50% { opacity: 0; }
+
 }
+
+
 
 .animate-rec {
+
   animation: recBlink 1s step-end infinite;
+
 }
+
